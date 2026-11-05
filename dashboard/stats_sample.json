@@ -1,0 +1,108 @@
+{
+  "sample": true,
+  "note": "Datos de ejemplo para desarrollo local.",
+  "version": "4.51",
+  "alive": true,
+  "last_scan_at": "2026-11-05T20:55:00-03:00",
+  "updated_at": "2026-11-05T20:55:00-03:00",
+  "notify": { "telegram": true },
+  "size_usd": 5,
+  "cocos": {
+    "label": "Cartera Cocos",
+    "usd": 291922,
+    "updated_at": "2026-11-05T13:00:00-03:00"
+  },
+  "portfolio": {
+    "version": "v4.51",
+    "family": "cartera",
+    "family_since": "2026-11-02T18:55:00-03:00",
+    "version_since": "2026-11-02T18:55:00-03:00",
+    "pnl_usd": -2.65,
+    "gross_usd": 0.89,
+    "pnl_today_usd": -2.58,
+    "trades_today": 6,
+    "win_rate": 0.333,
+    "wins": 7,
+    "trades": 21,
+    "open_positions": 0,
+    "unrealized_usd": null,
+    "max_open": 5,
+    "by_strategy": [
+      { "strategy": "solid_trail_p20", "pnl_usd": -1.85, "pnl_today_usd": -1.78, "trades": 19, "win_rate": 0.368, "open_positions": 0 },
+      { "strategy": "cartera_tp12", "pnl_usd": -0.79, "pnl_today_usd": -0.79, "trades": 2, "win_rate": 0, "open_positions": 0 },
+      { "strategy": "cartera_s300", "pnl_usd": 0, "pnl_today_usd": 0, "trades": 0, "win_rate": 0, "open_positions": 0 }
+    ],
+    "equity": [
+      { "t": "2026-11-02T18:00:00-03:00", "y": 0 },
+      { "t": "2026-11-02T19:00:00-03:00", "y": 0.3 },
+      { "t": "2026-11-02T20:00:00-03:00", "y": 0.55 },
+      { "t": "2026-11-02T21:00:00-03:00", "y": 0.7 },
+      { "t": "2026-11-02T22:00:00-03:00", "y": 0.7 },
+      { "t": "2026-11-03T10:00:00-03:00", "y": 0.7 },
+      { "t": "2026-11-03T14:00:00-03:00", "y": 1.1 },
+      { "t": "2026-11-03T18:00:00-03:00", "y": 1.1 },
+      { "t": "2026-11-03T21:00:00-03:00", "y": 0.95 },
+      { "t": "2026-11-03T22:00:00-03:00", "y": 1.29 },
+      { "t": "2026-11-04T09:00:00-03:00", "y": 1.0 },
+      { "t": "2026-11-04T13:00:00-03:00", "y": 0.6 },
+      { "t": "2026-11-04T17:00:00-03:00", "y": 0.2 },
+      { "t": "2026-11-04T21:00:00-03:00", "y": -0.3 },
+      { "t": "2026-11-05T09:00:00-03:00", "y": -0.9 },
+      { "t": "2026-11-05T13:00:00-03:00", "y": -1.24 },
+      { "t": "2026-11-05T14:00:00-03:00", "y": -1.5 },
+      { "t": "2026-11-05T16:00:00-03:00", "y": -2.0 },
+      { "t": "2026-11-05T18:00:00-03:00", "y": -2.4 },
+      { "t": "2026-11-05T20:00:00-03:00", "y": -2.65 }
+    ],
+    "recent": [
+      { "entry_time": "2026-11-05T12:40:00-03:00", "exit_time": "2026-11-05T13:13:00-03:00", "sym": "Fartcoin", "strategy": "cartera_tp12", "reason": "stop", "max_gain_pct": 0.6, "pnl_usd": -0.62, "pnl_pct": -12.4 },
+      { "entry_time": "2026-11-05T12:40:00-03:00", "exit_time": "2026-11-05T13:13:00-03:00", "sym": "Fartcoin", "strategy": "solid_trail_p20", "reason": "stop", "max_gain_pct": 0.6, "pnl_usd": -0.62, "pnl_pct": -12.4 },
+      { "entry_time": "2026-11-05T08:50:00-03:00", "exit_time": "2026-11-05T09:18:00-03:00", "sym": "10K DOG", "strategy": "solid_trail_p20", "reason": "tiempo", "max_gain_pct": 0, "pnl_usd": -0.13, "pnl_pct": -2.7 },
+      { "entry_time": "2026-11-04T23:40:00-03:00", "exit_time": "2026-11-05T00:08:00-03:00", "sym": "MAGA2028", "strategy": "solid_trail_p20", "reason": "stop", "max_gain_pct": 2, "pnl_usd": -0.86, "pnl_pct": -17.2 },
+      { "entry_time": "2026-11-04T19:10:00-03:00", "exit_time": "2026-11-04T19:46:00-03:00", "sym": "WIFHAT", "strategy": "solid_trail_p20", "reason": "trailing", "max_gain_pct": 14, "pnl_usd": 0.41, "pnl_pct": 8.2 },
+      { "entry_time": "2026-11-03T22:05:00-03:00", "exit_time": "2026-11-03T22:40:00-03:00", "sym": "POPCAT2", "strategy": "solid_trail_p20", "reason": "TP 20%", "max_gain_pct": 21, "pnl_usd": 0.58, "pnl_pct": 20.1 }
+    ]
+  },
+  "open_positions": [],
+  "strategies": [
+    { "name": "solid300_tp25", "trades": 52, "win_rate": 0.519, "pnl_usd": 5.03, "pnl_jup_usd": 7.57 },
+    { "name": "lab_copy_rot", "trades": 6, "win_rate": 0.5, "pnl_usd": 2.26, "pnl_jup_usd": 1.55, "plain": "Copy-trading: copia a la billetera #1 (aciertos), vende cuando vende, stop -30 %, rota tras 2 h sin pérdidas." },
+    { "name": "lab_p20_tp12", "trades": 40, "win_rate": 0.45, "pnl_usd": 2.06, "plain": "Como p20, pero con toma de ganancia en +12 %." }
+  ],
+  "loteria": {
+    "detail": {
+      "real": {
+        "realized": -31.28,
+        "pnl": -31.28,
+        "wins": 9,
+        "closed": 40,
+        "open": 2,
+        "win_rate": 0.225,
+        "best": 4.2,
+        "best_sym": "DOGWIF2",
+        "x3": 2,
+        "x5": 1,
+        "x10": 0,
+        "open_mark": -1.1,
+        "today": { "net": -3.4, "bets": 5, "closed": 4, "wins": 1 }
+      }
+    },
+    "open_bets": [],
+    "closed_bets": [],
+    "versions": []
+  },
+  "asl": {
+    "conf": {
+      "name": "Confluencia",
+      "maxb": 3,
+      "maxo": 8,
+      "usd": 200,
+      "summary": { "realized": 11.8, "unrealized": 0, "trades": 14, "wins": 9, "open": 1 },
+      "open": [],
+      "closed": [],
+      "brake": { "color": "verde", "note": "Mercado normal." }
+    },
+    "mkt": { "sem": { "color": "verde" } },
+    "others": []
+  }
+}

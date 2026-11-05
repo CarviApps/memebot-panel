@@ -1052,7 +1052,7 @@ body.in-app .tabs button[aria-selected="true"] {
 
 .side-out { margin-top: auto; align-self: flex-start; }
 
-body.in-app .wrap { width: min(1080px, calc(100% - 28px)); }
+body.in-app .wrap { width: min(1600px, calc(100% - 48px)); margin-left: 0; }
 
 html, body { overflow-x: clip; }
 .maincol, .wrap, main#app, .sec, .page-head, .strip, .brake, .hero-sec { max-width: 100%; min-width: 0; }

@@ -4,6 +4,7 @@ const onLocalHost = location.hostname === "localhost" || location.hostname === "
 const REMOTE = Boolean(CFG.supabaseUrl && CFG.supabaseAnonKey) && !onLocalHost;
 
 const money = new Intl.NumberFormat("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const cocosFmt = new Intl.NumberFormat("es-AR", { maximumFractionDigits: 0 });
 const numFmt = new Intl.NumberFormat("es-AR", { maximumFractionDigits: 1 });
 const axisFmt = new Intl.NumberFormat("es-AR", { maximumFractionDigits: 1 });
 const multFmt = new Intl.NumberFormat("es-AR", { maximumFractionDigits: 2 });
@@ -114,6 +115,13 @@ function signedText(value) {
   if (n > 0) return `+${body}`;
   if (n < 0) return `−${body}`;
   return body;
+}
+
+function cocosAmountText(value) {
+  const n = Number(value);
+  if (!Number.isFinite(n)) return "—";
+  const sign = n > 0 ? "+" : n < 0 ? "−" : "";
+  return `${sign}$ ${cocosFmt.format(Math.abs(n))}`;
 }
 
 function usdHtml(value) {
@@ -760,14 +768,14 @@ function renderChrome(stats) {
   const hasNews = Boolean(stats.noticias_x && typeof stats.noticias_x === "object");
   if (newsTab) newsTab.hidden = !hasNews;
   if (!hasNews && state.tab === "noticias") state.tab = "principal";
-  const cocos = cocosValue(stats);
+  const cocos = cocosValue(stats) || { label: "Cartera Cocos", usd: null, when: "" };
   const cocosBox = document.getElementById("side-real");
   const cocosEl = document.getElementById("cocos-line");
-  if (cocosBox) cocosBox.hidden = !cocos;
-  if (cocos && cocosEl) {
+  if (cocosBox) cocosBox.hidden = false;
+  if (cocosEl) {
     const amount = cocos.usd == null
       ? `<em>sin saldo en este envío</em>`
-      : `<b>${esc(money.format(cocos.usd))}</b>`;
+      : `<b>${esc(cocosAmountText(cocos.usd))}</b>`;
     const when = cocos.when ? `<span class="side-when">${esc(hora(cocos.when))} ART</span>` : "";
     cocosEl.innerHTML = `<span>${esc(cocos.label)}</span>${amount}${when}`;
   }

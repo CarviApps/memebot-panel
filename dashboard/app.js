@@ -72,6 +72,10 @@ const state = {
   lotFilter: "abiertas",
   lotChosen: false,
   dev: params.get("dev") === "1",
+  cocosEditing: false,
+  cocosSaving: false,
+  cocosError: "",
+  cocosDraft: "",
 };
 
 let timer = 0;
@@ -773,11 +777,24 @@ function renderChrome(stats) {
   const cocosEl = document.getElementById("cocos-line");
   if (cocosBox) cocosBox.hidden = false;
   if (cocosEl) {
-    const amount = cocos.usd == null
-      ? `<em>sin saldo en este envío</em>`
-      : `<b>${esc(cocosAmountText(cocos.usd))}</b>`;
-    const when = cocos.when ? `<span class="side-when">${esc(hora(cocos.when))} ART</span>` : "";
-    cocosEl.innerHTML = `<span>${esc(cocos.label)}</span>${amount}${when}`;
+    if (state.cocosEditing) {
+      const busy = state.cocosSaving;
+      cocosEl.innerHTML = `<span>${esc(cocos.label)}</span>
+        <span class="cocos-edit">
+          <input type="number" id="cocos-input" class="cocos-input" inputmode="decimal" min="0" step="any" value="${esc(state.cocosDraft)}" ${busy ? "disabled" : ""} placeholder="USD">
+          <button type="button" class="link-btn" data-cocos-save="1" ${busy ? "disabled" : ""}>${busy ? "Guardando…" : "Guardar"}</button>
+          <button type="button" class="link-btn muted" data-cocos-cancel="1" ${busy ? "disabled" : ""}>Cancelar</button>
+        </span>${state.cocosError ? `<span class="cocos-error">${esc(state.cocosError)}</span>` : ""}`;
+    } else {
+      const amount = cocos.usd == null
+        ? `<em>sin saldo en este envío</em>`
+        : `<b>${esc(cocosAmountText(cocos.usd))}</b>`;
+      const when = cocos.when ? `<span class="side-when">${esc(hora(cocos.when))} ART</span>` : "";
+      const editBtn = REMOTE
+        ? `<button type="button" class="cocos-edit-btn" data-cocos-edit="1" aria-label="Editar saldo de ${esc(cocos.label)}" title="Editar saldo">✎</button>`
+        : "";
+      cocosEl.innerHTML = `<span>${esc(cocos.label)}</span>${amount}${when}${editBtn}`;
+    }
   }
   const scan = document.getElementById("scan-line");
   if (scan) {
@@ -1908,6 +1925,64 @@ async function loadStats(token) {
   return response.json();
 }
 
+async function saveCocos() {
+  const input = document.getElementById("cocos-input");
+  if (!input || !state.stats) return;
+  const raw = input.value.trim();
+  state.cocosDraft = raw;
+  const n = Number(raw);
+  if (!raw || !Number.isFinite(n) || n < 0) {
+    state.cocosError = "Ingresá un monto válido (0 o más).";
+    state.json = "";
+    render(state.stats);
+    return;
+  }
+  const token = currentToken();
+  if (!REMOTE || !token) {
+    state.cocosError = "No se puede guardar en este modo.";
+    state.json = "";
+    render(state.stats);
+    return;
+  }
+  state.cocosSaving = true;
+  state.cocosError = "";
+  state.json = "";
+  render(state.stats);
+  try {
+    const response = await fetch(`${CFG.supabaseUrl.replace(/\/$/, "")}/rest/v1/rpc/update_cocos`, {
+      method: "POST",
+      headers: {
+        apikey: CFG.supabaseAnonKey,
+        Authorization: `Bearer ${CFG.supabaseAnonKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ tok: token, usd: n }),
+    });
+    if (!response.ok) {
+      let msg = `Supabase respondió ${response.status}`;
+      try {
+        const errBody = await response.json();
+        if (errBody && errBody.message) msg = errBody.message;
+      } catch (parseError) { /* keep default msg */ }
+      throw new Error(msg);
+    }
+    const updatedCocos = await response.json();
+    if (updatedCocos && typeof updatedCocos === "object") state.stats.cocos = updatedCocos;
+    state.cocosEditing = false;
+    state.cocosSaving = false;
+    state.cocosError = "";
+    state.json = "";
+    render(state.stats);
+    showToast("Saldo de Cartera Cocos actualizado.");
+    setTimeout(hideToast, 4000);
+  } catch (error) {
+    state.cocosSaving = false;
+    state.cocosError = error.message || "No pude guardar el saldo.";
+    state.json = "";
+    render(state.stats);
+  }
+}
+
 function showGate() {
   document.body.classList.remove("in-app");
   document.getElementById("gate").hidden = false;
@@ -2041,10 +2116,32 @@ document.getElementById("tabs").addEventListener("keydown", (event) => {
 });
 
 document.addEventListener("click", (event) => {
-  const target = event.target.closest("[data-tab], [data-chart-mode], [data-expand], [data-lot-filter]");
+  const target = event.target.closest("[data-tab], [data-chart-mode], [data-expand], [data-lot-filter], [data-cocos-edit], [data-cocos-save], [data-cocos-cancel]");
   if (!target) return;
   if (target.dataset.tab) {
     selectTab(target.dataset.tab);
+    return;
+  }
+  if (target.dataset.cocosEdit) {
+    const cur = cocosValue(state.stats);
+    state.cocosDraft = cur && cur.usd != null ? String(Math.round(cur.usd)) : "";
+    state.cocosEditing = true;
+    state.cocosError = "";
+    state.json = "";
+    if (state.stats) render(state.stats);
+    const input = document.getElementById("cocos-input");
+    if (input) { input.focus(); input.select(); }
+    return;
+  }
+  if (target.dataset.cocosCancel) {
+    state.cocosEditing = false;
+    state.cocosError = "";
+    state.json = "";
+    if (state.stats) render(state.stats);
+    return;
+  }
+  if (target.dataset.cocosSave) {
+    saveCocos();
     return;
   }
   if (target.dataset.chartMode) {
@@ -2077,6 +2174,24 @@ document.addEventListener("click", (event) => {
   if (target.dataset.lotFilter) {
     state.lotFilter = target.dataset.lotFilter;
     state.lotChosen = true;
+    state.json = "";
+    if (state.stats) render(state.stats);
+  }
+});
+
+document.addEventListener("input", (event) => {
+  if (event.target && event.target.id === "cocos-input") state.cocosDraft = event.target.value;
+});
+
+document.addEventListener("keydown", (event) => {
+  if (!event.target || event.target.id !== "cocos-input") return;
+  if (event.key === "Enter") {
+    event.preventDefault();
+    saveCocos();
+  } else if (event.key === "Escape") {
+    event.preventDefault();
+    state.cocosEditing = false;
+    state.cocosError = "";
     state.json = "";
     if (state.stats) render(state.stats);
   }

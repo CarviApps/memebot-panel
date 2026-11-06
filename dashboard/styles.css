@@ -1042,28 +1042,59 @@ body.in-app .tabs button[aria-selected="true"] {
   border-top: 1px solid var(--line);
 }
 
-.cocos-line, .scan-line, .tg-line {
+.scan-line, .tg-line {
   margin: 0;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   gap: 4px 8px;
   font-size: 13px;
-}
-
-.cocos-line b, .cocos-line em, .scan-line, .tg-line {
   font-style: normal;
 }
 
-.cocos-line b {
-  font-family: "IBM Plex Mono", ui-monospace, monospace;
+.tg-line.is-on { color: var(--gain); }
+.tg-line.is-off { color: var(--loss); }
+
+.cocos-line {
+  display: grid;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 10px 12px;
+}
+
+.cocos-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.cocos-label {
+  color: var(--muted);
+  font-size: 12px;
   font-weight: 500;
 }
 
-.cocos-line em, .side-when { color: var(--faint); font-size: 12px; }
+.cocos-amount {
+  margin: 0;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 1.12rem;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.03em;
+}
 
-.tg-line.is-on { color: var(--gain); }
-.tg-line.is-off { color: var(--loss); }
+.cocos-amount em {
+  font-style: normal;
+  color: var(--faint);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: normal;
+}
+
+.side-when { margin: 0; color: var(--faint); font-size: 12px; }
 
 .cocos-edit-btn {
   min-height: 0;
@@ -1077,21 +1108,17 @@ body.in-app .tabs button[aria-selected="true"] {
   color: var(--faint);
   font-size: 11px;
   cursor: pointer;
+  flex-shrink: 0;
 }
 
 .cocos-edit-btn:hover { color: var(--text); border-color: var(--muted); }
 
-.cocos-edit {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  flex-wrap: wrap;
-}
+.cocos-edit-row { width: 100%; }
 
 .cocos-input {
-  width: 110px;
-  min-height: 30px;
-  padding: 4px 8px;
+  width: 100%;
+  min-height: 32px;
+  padding: 6px 8px;
   border-radius: 8px;
   border: 1px solid var(--line);
   background: #0b0e14;
@@ -1100,12 +1127,19 @@ body.in-app .tabs button[aria-selected="true"] {
   font-size: 13px;
 }
 
-.cocos-edit .link-btn { padding: 4px 2px; min-height: 0; }
-.cocos-edit .link-btn.muted { color: var(--muted); font-weight: 500; }
-.cocos-edit .link-btn[disabled], .cocos-input[disabled] { opacity: 0.6; cursor: default; }
+.cocos-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.cocos-actions .link-btn { padding: 4px 2px; min-height: 0; }
+.cocos-actions .link-btn.muted { color: var(--muted); font-weight: 500; }
+.cocos-actions .link-btn[disabled], .cocos-input[disabled] { opacity: 0.6; cursor: default; }
 
 .cocos-error {
-  flex-basis: 100%;
+  margin: 0;
   color: var(--loss);
   font-size: 12px;
 }
@@ -1230,6 +1264,7 @@ img, svg, .spark { max-width: 100%; height: auto; }
     padding-top: 8px;
   }
   .side-kicker { width: 100%; margin: 0; }
+  .cocos-line { width: 100%; }
   .side-out { margin-top: 0; }
   .page-head h1 { font-size: 1.45rem; }
   body.in-app .wrap { width: min(1080px, calc(100% - 16px)); }

@@ -779,21 +779,23 @@ function renderChrome(stats) {
   if (cocosEl) {
     if (state.cocosEditing) {
       const busy = state.cocosSaving;
-      cocosEl.innerHTML = `<span>${esc(cocos.label)}</span>
-        <span class="cocos-edit">
+      cocosEl.innerHTML = `<div class="cocos-head"><span class="cocos-label">${esc(cocos.label)}</span></div>
+        <div class="cocos-edit-row">
           <input type="number" id="cocos-input" class="cocos-input" inputmode="decimal" min="0" step="any" value="${esc(state.cocosDraft)}" ${busy ? "disabled" : ""} placeholder="USD">
+        </div>
+        <div class="cocos-actions">
           <button type="button" class="link-btn" data-cocos-save="1" ${busy ? "disabled" : ""}>${busy ? "Guardando…" : "Guardar"}</button>
           <button type="button" class="link-btn muted" data-cocos-cancel="1" ${busy ? "disabled" : ""}>Cancelar</button>
-        </span>${state.cocosError ? `<span class="cocos-error">${esc(state.cocosError)}</span>` : ""}`;
+        </div>${state.cocosError ? `<p class="cocos-error">${esc(state.cocosError)}</p>` : ""}`;
     } else {
       const amount = cocos.usd == null
         ? `<em>sin saldo en este envío</em>`
-        : `<b>${esc(cocosAmountText(cocos.usd))}</b>`;
-      const when = cocos.when ? `<span class="side-when">${esc(hora(cocos.when))} ART</span>` : "";
+        : esc(cocosAmountText(cocos.usd));
+      const when = cocos.when ? `<p class="side-when">${esc(hora(cocos.when))} ART</p>` : "";
       const editBtn = REMOTE
         ? `<button type="button" class="cocos-edit-btn" data-cocos-edit="1" aria-label="Editar saldo de ${esc(cocos.label)}" title="Editar saldo">✎</button>`
         : "";
-      cocosEl.innerHTML = `<span>${esc(cocos.label)}</span>${amount}${when}${editBtn}`;
+      cocosEl.innerHTML = `<div class="cocos-head"><span class="cocos-label">${esc(cocos.label)}</span>${editBtn}</div><p class="cocos-amount">${amount}</p>${when}`;
     }
   }
   const scan = document.getElementById("scan-line");
